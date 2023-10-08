@@ -6,24 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import requests
 import openai
-
-
-
-# Obtém o diretório atual
-dir_path = os.getcwd()
-
-# Configura as opções do ChromeDriver com o perfil de usuário
-chrome_options = Options()
-chrome_options.add_argument(f'user-data-dir={dir_path}/profile/zap')
-
-# Inicializa o navegador com as opções configuradas
-driver = webdriver.Chrome(options=chrome_options)
-
-
-driver.get('https://web.whatsapp.com/')
-
-
-time.sleep(10)
+import PySimpleGUI as sg
+from password import usuario01
 
 
 
@@ -52,12 +36,10 @@ def bot():
 
         cliente = 'mensagem do cliente:'
         texto2 = 'Responda a mensagem do cliente com base no proximo texto'
-        texto = 'explique tudo sobre A Agência Digital MaxResults é especializada em marketing digital e visa impulsionar o sucesso online das empresas. Com uma equipe experiente, oferecemos serviços abrangentes, desde otimização de mecanismos de busca (SEO) até campanhas de pagamento por clique (PPC) e marketing de conteúdo. Nossos casos de sucesso demonstram nosso compromisso em alcançar resultados impactantes. Para começar a transformar sua presença online, entre em contato conosco pelo telefone (11) 9876-5432 ou por email (info@agenciamaxresults.com). Seja qual for o seu objetivo de marketing digital, estamos aqui para ajudar a atingi-lo. Junte-se a nós e veja a diferença que podemos fazer para o seu negócio.'
         questao = cliente + msg + texto2 + texto
-        ####PROCESSA A MENSAGEM NA API ia
 
-        openai.api_key = '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'
-
+        #### API OPENAI
+        openai.api_key = apiopenai.strip()
         response = openai.Completion.create(
         model="text-davinci-003",
         prompt=questao,
@@ -68,7 +50,6 @@ def bot():
         presence_penalty=0
         )
         resposta = response['choices'][0]['text']
-        
         time.sleep(3)
 
 
@@ -94,12 +75,67 @@ def bot():
     except:
         print('')
 
-while True:
-
-    bot()       
-
      
 
+######### TELA 
+
+imagem = sg.Image(filename='ia.png', key='-IMAGE-')
+imagem2 = sg.Image(filename='ia.png', key='_CAMIMAGE_')
+
+tela1 = [
+    [sg.Column([[imagem]],justification='center')],
+    [sg.Text('SENHA')],
+    [sg.Input(key='senha')],
+    [sg.Button('ENTRAR')],    
+    [sg.Text('',key='mensagem')],
+
+]
+
+
+tela2 = [
+    [sg.Column([[imagem2]],justification='center')],
+    [sg.Text('BEM VINDO AO BOT DE INTELGENCIA ARTIFICIAL')],
+    [sg.Text('Insira a API da OPENAI')],
+    [sg.Input(key='apiopenai')],
+    [sg.Multiline(size=(80,20),key='texto')],
+    [sg.Text('TENHA O CELULAR EM MÃOS')],
+    [sg.Text('CLIQUE ABAIXO PARA CAPTURAR O QR CODE')],
+    [sg.Button('CAPTURAR QRCODE')],
+  
+]
+#############################################################
+
+
+windows1 = sg.Window('IA BOT', layout= tela1)
+windows2 = sg.Window('IA BOT', layout= tela2)
+
+
+while True:
+    event, values = windows1.read()
+    if event == sg.WIN_CLOSED:
+        break
+    if event == 'ENTRAR':
+        senha = values['senha']
+        if senha == usuario01:
+            windows1.close()
+            event2, values2 = windows2.read()
+            if event2 == 'CAPTURAR QRCODE':
+                apiopenai = values2['apiopenai']
+                texto = values2['texto']
+                windows2.close()
+                dir_path = os.getcwd()
+                chrome_options2 = Options()
+                chrome_options2.add_argument(r"user-data-dir=" + dir_path + "profile/zap")
+                driver = webdriver.Chrome(options=chrome_options2)
+                driver.get('https://web.whatsapp.com/')
+                time.sleep(10)
+                while True:
+                    bot()
+
+            if event2 == sg.WIN_CLOSED:
+                break
+        else:
+            windows1['mensagem'].update('ERRO DE SENHA')
 
         
 
