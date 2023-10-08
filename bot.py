@@ -36,6 +36,7 @@ def bot():
 
         cliente = 'mensagem do cliente:'
         texto2 = 'Responda a mensagem do cliente com base no proximo texto'
+        #texto = 'explique tudo sobre A Agência Digital MaxResults é especializada em marketing digital e visa impulsionar o sucesso online das empresas. Com uma equipe experiente, oferecemos serviços abrangentes, desde otimização de mecanismos de busca (SEO) até campanhas de pagamento por clique (PPC) e marketing de conteúdo. Nossos casos de sucesso demonstram nosso compromisso em alcançar resultados impactantes. Para começar a transformar sua presença online, entre em contato conosco pelo telefone (11) 9876-5432 ou por email (info@agenciamaxresults.com). Seja qual for o seu objetivo de marketing digital, estamos aqui para ajudar a atingi-lo. Junte-se a nós e veja a diferença que podemos fazer para o seu negócio.'
         questao = cliente + msg + texto2 + texto
 
         #### API OPENAI
